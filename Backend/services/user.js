@@ -64,12 +64,10 @@ const isValid=await bcrypt.compare(password,user.password);
     {
         return { status: 401, message: "Password is Wrong" };
     }
-
 }
 else{
     return{status:404,message:"User Not Found"};   
 }
-
     }
     catch(e)
     {
