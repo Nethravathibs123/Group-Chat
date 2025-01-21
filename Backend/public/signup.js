@@ -17,13 +17,24 @@ try{
     const response=await axios.post('http://localhost:3000/signup',user)
     console.log(response.data);
         if (response.status === 201) {
-            messageParagraph.textContent = 'Sign up successful!';
-            messageParagraph.style.color = 'green';
+            alert("Successfully signed up!");   
         } else {
             throw new Error(response.data.message || 'Sign up failed.');
         }
     }
 catch(error){
-    alert("User already Exist")
-}
+    console.error("Error details:", error);
+        if (error.response) {
+            console.error("Response data:", error.response.data);
+            console.error("Status code:", error.response.status);
+
+            if (error.response.status === 409) {
+                alert("User already exists, Please Login");
+            } else {
+                alert(error.response.data.message || "An unexpected error occurred.");
+            }
+        } else {
+            alert("An error occurred during signup. Please try again.");
+        }
+    }
 }
