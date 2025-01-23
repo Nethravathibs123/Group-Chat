@@ -97,20 +97,14 @@ module.exports.joinGroup2 = async (req) => {
     try {
         const { groupName } = req.body;
         const userId = req.user.id;
-
-        // Find the group by name
         const group = await Group.findOne({ where: { name: groupName } });
         if (!group) {
             return { status: 404, error: "Group not found" };
         }
-
-        // Check if the user is already a member
         const isMember = await GroupMembership.findOne({ where: { groupId: group.id, userId } });
         if (isMember) {
             return { status: 404, error: "You are already a member of this group" };
         }
-
-        // Add the user to the group
         await GroupMembership.create({ groupId: group.id, userId: userId }, { transaction: t });
         await t.commit();
         return { status: 200, message: `Joined group "${groupName}" successfully` };
@@ -124,7 +118,7 @@ module.exports.joinGroup2 = async (req) => {
 
 module.exports.updateAdminStatus = async (req) => {
     const { groupId } = req.params;
-    const { isAdmin } = req.body; // true to promote, false to demote
+    const { isAdmin } = req.body; 
  const email=req.body.email;
  console.log("Email is "+email);
  

@@ -5,12 +5,14 @@ const bcrypt=require('bcryptjs')
 const sequelize=require('../util/database');
 const { where } = require('sequelize');
 
+const JWT_SECRET = "Nethra";
 
-function generateToken(id){
-    const key = "Nethra";
+console.log(JWT_SECRET);
 
-    return jwt.sign({ userId: id }, key);
+function generateToken(id) {
+    return jwt.sign({ userId: id }, JWT_SECRET);
 }
+
 module.exports.signUp=async(req)=>{
 
     
