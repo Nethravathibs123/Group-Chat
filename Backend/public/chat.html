@@ -5,38 +5,36 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chat</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="chat.css" rel="stylesheet"> 
 </head>
 <body class="d-flex vh-100">
-
-    <div id="sidebar" class="bg-light p-3 border-end">
-        <h2 class="h5">Chat Groups</h2>
-        <div class="join-group mb-3">
-            <input type="text" id="join-group-name" class="form-control mb-2" placeholder="Enter group name to join">
-            <button class="btn btn-primary w-100" onclick="joinGroup()">Join Group</button>
+    <div id="sidebar">
+        <h2>Chat Groups</h2>
+        <div class="join-group">
+            <input type="text" id="join-group-name" placeholder="Enter group name to join">
+            <button onclick="joinGroup()">Join Group</button>
         </div>
-    
-        <div id="group-list" class="list-group mb-3"></div>
-        
+        <div id="group-list"></div>
         <div class="create-group">
-            <button class="btn btn-primary w-100" onclick="createGroup()">Create Group</button>
+            <button onclick="createGroup()">Create Group</button>
         </div>
     </div>
-    
-    <div id="chat-container" class="flex-grow-1 d-flex flex-column">
-        <div id="messages-container" class="flex-grow-1 p-3 overflow-auto"></div>
-        <form id="message-input-container" class="d-flex p-3 border-top" onsubmit="handleSend(event)">
-            <input type="text" id="message" class="form-control me-2" placeholder="Type your message here...">
-            <button type="submit" class="btn btn-primary">Send</button>
+
+    <div id="chat-container">
+        <div id="messages-container"></div>
+        <form id="message-input-container" onsubmit="handleSend(event)">
+            <input type="text" id="message" placeholder="Type your message here...">
+            <button type="submit">Send</button>
         </form>
     </div>
-    
-    <div id="group-management" class="p-3 bg-light border-start" style="display: none;">
-        <h3 class="h6">Manage Group</h3>
-        <button class="btn btn-secondary w-100 mb-2" onclick="addMember()">Add Member</button>
-        <button class="btn btn-secondary w-100 mb-2" onclick="promoteToAdmin()">Promote to Admin</button>
-        <button class="btn btn-danger w-100" onclick="removeMember()">Remove Member</button>
+
+    <div id="group-management">
+        <h3>Manage Group</h3>
+        <button onclick="addMember()">Add Member</button>
+        <button onclick="promoteToAdmin()">Promote to Admin</button>
+        <button onclick="removeMember()">Remove Member</button>
     </div>
-    
+
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
     <script src="chat.js"></script>
