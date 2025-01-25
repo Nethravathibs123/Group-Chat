@@ -1,4 +1,4 @@
-const socket=io('http://localhost:3000')
+const socket = io('http://localhost:3000');
 
 document.addEventListener('DOMContentLoaded', () => {
     loadGroups();
@@ -28,18 +28,15 @@ function displayGroups(groups) {
             loadGroupMessages(group.id);
             highlightActiveGroup(groupElement);
             showGroupManagement(group.id);
-            joinGroupForSocket(group.id)
+            joinGroupForSocket(group.id);
         });
         groupList.appendChild(groupElement);
     });
 }
 
-function joinGroupForSocket(groupId)
-{
-console.log(socket.id,groupId);
-socket.emit('joinGroup', groupId);
-console.log("emit join group");
-
+function joinGroupForSocket(groupId) {
+    socket.emit('joinGroup', groupId);
+    console.log("emit join group");
 }
 
 function highlightActiveGroup(groupElement) {
@@ -49,9 +46,7 @@ function highlightActiveGroup(groupElement) {
 }
 
 socket.on('rec', (groupId) => {
-    
     loadGroupMessages(groupId);
-  
 });
 
 function handleSend(event) {
@@ -61,7 +56,6 @@ function handleSend(event) {
     const token = sessionStorage.getItem('token');
     const currentGroupId = document.querySelector('.group.active')?.dataset.groupId;
 
-    
     if (message && currentGroupId) {
         axios.post(`http://localhost:3000/groups/${currentGroupId}/messages`, { message: message }, { headers: { "Authorization": token } })
         .then(response => {
@@ -71,11 +65,11 @@ function handleSend(event) {
             storeMessagesInLocalStorage(currentGroupId, updatedMessages);
             displayMessages(updatedMessages);
             messageInput.value = ''; 
-            socket.emit('send',currentGroupId);
-            })
-            .catch(error => {
-                console.error(error);
-            });
+            socket.emit('send', currentGroupId);
+        })
+        .catch(error => {
+            console.error(error);
+        });
     }
 }
 
@@ -139,14 +133,13 @@ function showGroupManagement(groupId) {
 
 function addMember() {
     const groupId = document.getElementById('group-management').dataset.groupId;
-    const memberInfo = prompt("Enter member's email :");
+    const memberInfo = prompt("Enter member's email:");
     const token = sessionStorage.getItem('token');
 
     if (memberInfo) {
         axios.post(`http://localhost:3000/groups/${groupId}/members`, { memberInfo }, { headers: { "Authorization": token } })
             .then(response => {
                 alert("Member added successfully!");
-                
             })
             .catch(error => {
                 console.error(error);
@@ -161,10 +154,9 @@ function promoteToAdmin() {
     const token = sessionStorage.getItem('token');
 
     if (email) {
-        axios.patch(`http://localhost:3000/groups/${groupId}/admins`, { email:email, isAdmin: true }, { headers: { "Authorization": token } })
+        axios.patch(`http://localhost:3000/groups/${groupId}/admins`, { email: email, isAdmin: true }, { headers: { "Authorization": token } })
             .then(response => {
                 alert("User promoted to admin successfully!");
-              
             })
             .catch(error => {
                 console.error(error);
@@ -182,7 +174,6 @@ function removeMember() {
         axios.delete(`http://localhost:3000/groups/${groupId}/members/${email}`, { headers: { "Authorization": token } })
             .then(response => {
                 alert("User removed from group successfully!");
-             
             })
             .catch(error => {
                 console.error(error);
@@ -193,7 +184,7 @@ function removeMember() {
 
 function storeMessagesInLocalStorage(groupId, messages) {
     const maxMessages = 10;
-    const storedMessages = messages.slice(-maxMessages); // Store only the last 10 messages
+    const storedMessages = messages.slice(-maxMessages); 
     localStorage.setItem(`chatMessages_${groupId}`, JSON.stringify(storedMessages));
 }
 
@@ -202,22 +193,16 @@ function getMessagesFromLocalStorage(groupId) {
 }
 
 function loadGroupMessages(groupId) {
-    
     const storedMessages = getMessagesFromLocalStorage(groupId);
-   
-        console.log("gett new msg");
-        
-        const token = sessionStorage.getItem('token');
-        axios.get(`http://localhost:3000/groups/${groupId}/messages`, { headers: { "Authorization": token }, params: { limit: 10 } })
-            .then(response => {
-                const messages = response.data.messages;
-                console.log(messages);
-                messages.reverse();
-                storeMessagesInLocalStorage(groupId, messages);
-                displayMessages(messages);
-            })
-            .catch(error => {
-                console.error(error);
-            });
-    
+    const token = sessionStorage.getItem('token');
+    axios.get(`http://localhost:3000/groups/${groupId}/messages`, { headers: { "Authorization": token }, params: { limit: 10 } })
+        .then(response => {
+            const messages = response.data.messages;
+            messages.reverse();
+            storeMessagesInLocalStorage(groupId, messages);
+            displayMessages(messages);
+        })
+        .catch(error => {
+            console.error(error);
+        });
 }

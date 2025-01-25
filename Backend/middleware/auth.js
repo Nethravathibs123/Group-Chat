@@ -11,7 +11,7 @@ const auth=async(req,res,next)=>{
         }
         else
         {
-        const key = "sahil";
+        const key = "Nethra";
      
         const id=jwt.verify(token,key);
        
