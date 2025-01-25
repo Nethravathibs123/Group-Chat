@@ -14,7 +14,7 @@ router.post('/join',auth,groupController.JoinGroup);
 router.patch("/:groupId/admins",auth,groupController.updateAdminStatus);
 router.delete('/:groupId/members/:email',auth,groupController.removeUserFromGroup)
 router.post('/:groupId/members',auth,groupController.getMemberByEmail)  
-
+router.post('/:groupId/archive', auth, groupController.archiveMessages);
 
 
 

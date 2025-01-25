@@ -30,6 +30,10 @@ module.exports.newMessage = async (req, res) => {
     return res.status(result.status).json({ message: result.message, error: result.error });
 };
 
+module.exports.archiveMessages = async (req, res) => {
+    const result = await groupService.archiveMessages(req);
+    return res.status(result.status).json(result);
+};
 module.exports.joinGroup2 = async (req, res) => {
     const result = await groupService.joinGroup2(req);
     return res.status(result.status).json({ message: result.message, error: result.error });

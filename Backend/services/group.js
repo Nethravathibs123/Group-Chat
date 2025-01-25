@@ -3,6 +3,7 @@ const Group = require('../models/group');
 const GroupMembership = require('../models/groupmember');
 const Message = require('../models/message');
 const sequelize = require('../util/database');
+const ArchivedChat = require('../models/ArchivedChat')
 const { Op } = require('sequelize');
 const User=require('../models/user')
 
@@ -92,6 +93,27 @@ module.exports.createMessage = async (req) => {
     }
 };
 
+module.exports.archiveMessages = async (req) => {
+    const { groupId } = req.params;
+    const t = await sequelize.transaction();
+    try {
+        const messagesToArchive = await Message.findAll({ where: { groupId, archived: false }, transaction: t });
+        for (const msg of messagesToArchive) {
+            await ArchivedChat.create({
+                message: msg.message,
+                userId: msg.userId,
+                groupId: msg.groupId
+            }, { transaction: t });
+            await msg.update({ archived: true }, { transaction: t });
+        }
+
+        await t.commit();
+        return { status: 200, message: 'Messages archived successfully' };
+    } catch (error) {
+        await t.rollback();
+        return { status: 500, error: error.message };
+    }
+};
 module.exports.joinGroup2 = async (req) => {
     const t = await sequelize.transaction();
     try {

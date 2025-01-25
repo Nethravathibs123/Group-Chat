@@ -212,3 +212,29 @@ function loadGroupMessages(groupId) {
             console.error(error);
         });
 }
+
+document.addEventListener('DOMContentLoaded', () => {
+    loadGroups();
+    document.getElementById('archive-button').addEventListener('click', () => {
+        const currentGroupId = document.querySelector('.group.active')?.dataset.groupId;
+        if (currentGroupId) {
+            archiveGroupMessages(currentGroupId);
+        } else {
+            alert("Please select a group to archive messages.");
+        }
+    });
+});
+
+function archiveGroupMessages(groupId) {
+    const token = sessionStorage.getItem('token');
+    console.log("Token:", token);
+    axios.post(`http://localhost:3000/groups/${groupId}/archive`, {}, { headers: { "Authorization": token } })
+        .then(response => {
+            alert(response.data.message);
+            loadGroupMessages(groupId); 
+        })
+        .catch(error => {
+            console.error(error);
+            alert("Failed to archive messages");
+        });
+}
