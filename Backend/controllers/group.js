@@ -25,7 +25,7 @@ module.exports.getAllMessage = async (req, res) => {
     }
 };
 
-module.exports.newMassage = async (req, res) => {
+module.exports.newMessage = async (req, res) => {
     const result = await groupService.createMessage(req);
     return res.status(result.status).json({ message: result.message, error: result.error });
 };

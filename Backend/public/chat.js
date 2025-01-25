@@ -56,6 +56,9 @@ function handleSend(event) {
     const token = sessionStorage.getItem('token');
     const currentGroupId = document.querySelector('.group.active')?.dataset.groupId;
 
+
+    console.log("Message:", message);
+    console.log("Current Group ID:", currentGroupId);
     if (message && currentGroupId) {
         axios.post(`http://localhost:3000/groups/${currentGroupId}/messages`, { message: message }, { headers: { "Authorization": token } })
         .then(response => {
@@ -69,6 +72,7 @@ function handleSend(event) {
         })
         .catch(error => {
             console.error(error);
+            alert("Failed to send message");
         });
     }
 }
@@ -199,8 +203,10 @@ function loadGroupMessages(groupId) {
         .then(response => {
             const messages = response.data.messages;
             messages.reverse();
-            storeMessagesInLocalStorage(groupId, messages);
-            displayMessages(messages);
+            const newMessages = messages.filter(msg => !storedMessages.some(storedMsg => storedMsg.id === msg.id));
+            const updatedMessages = [...storedMessages, ...newMessages].slice(-10);
+            storeMessagesInLocalStorage(groupId, updatedMessages);
+            displayMessages(updatedMessages);
         })
         .catch(error => {
             console.error(error);
