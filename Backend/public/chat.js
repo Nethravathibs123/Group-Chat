@@ -212,7 +212,6 @@ function loadGroupMessages(groupId) {
             console.error(error);
         });
 }
-
 document.addEventListener('DOMContentLoaded', () => {
     loadGroups();
     document.getElementById('archive-button').addEventListener('click', () => {
